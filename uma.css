@@ -4,7 +4,7 @@
     font-family: "Lato", sans-serif;
 }
 
-h1 {
+h1, h3 {
     text-align: center;
 }
 
@@ -15,6 +15,27 @@ h1 {
     justify-content: center;
     align-items: flex-start;
     margin-top: -0.5em;
+}
+
+.main-flex div {
+    height: 100px;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 1em;
+    box-sizing: border-box;
+    margin: 0.5em;
+}
+
+.main-flex div img {
+    height: 100%;
+    float: left;
+    margin-right: 1em;
+}
+
+.vcenter {
+    align-content: center;
+    height: 100%;
+    display: block;
 }
 
 .main-flex a {
@@ -28,19 +49,4 @@ a div {
 
 a:hover div {
     scale: 1.1;
-}
-
-.main-flex div {
-    height: 100px;
-    border: 2px solid;
-    border-radius: 10px;
-    padding: 1em;
-    box-sizing: border-box;
-    margin: 0.5em;
-}
-
-.main-flex div img {
-    height: 100%;
-    float: left;
-    margin-right: 1em;
 }

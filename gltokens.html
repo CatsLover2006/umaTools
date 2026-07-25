@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="uma.css">
+        <style>
+            .main-flex {
+                margin-top: 0 !important;
+            }
+            
+            .main-flex div {
+                height: 150px !important;
+                width: 300px;
+            }
+
+            .songDetails, .songBonus {
+                height: 100% !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            div.songBonus {
+                transform: translateX(-0.1em);
+            }
+
+            .songBonus img {
+                transform: translateY(2px);
+                margin-right: 2px !important;
+            }
+
+            span.rainbow {
+                background-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
+                border-radius: 3px;
+                margin-right: 2px;
+                transform: translateY(2px);
+                display: block;
+                float: left;
+                height: 1em;
+                width: 1em;
+            }
+
+            ul {
+                margin: 0.5em 0 0 0;
+                list-style-type: none;
+            }
+
+            ul img {
+                height: 1em !important;
+                transform: translateY(2px);
+                margin-right: 0.25em !important;
+            }
+
+            .songBonus img, .songBonus span.rainbow {
+                margin-left: 0.1em;
+            }
+
+            .songBonus span.rainbow img {
+                margin-left: 0;
+            }
+
+            span.rainbow img {
+                transform: scale(0.9);
+            }
+
+            div.autoSize {
+                height: auto !important; 
+                width: auto !important;
+            }
+
+            div.song {
+                height: auto !important;
+                max-width: 352px;
+                width: auto !important;
+            }
+
+            @container (min-width: 700px) {
+                div.song {
+                    max-width: 668px;
+                }
+            }
+
+            img.song {
+                border-radius: 3px;
+            }
+
+            input {
+                display:none;
+            }
+
+            .songbox {
+                transition: color ease-in 0.1s, background-color ease-in 0.1s;
+            }
+
+            .songbox:hover {
+                background-color: #ddd;
+            }
+            
+            :checked + label .songbox {
+                background-color: black;
+                color: white;
+            }
+            
+            :checked + label .songbox:hover {
+                background-color: #222;
+            }
+
+            img.half {
+                margin-right: -0.375em !important;
+            }
+
+            .concert h3 {
+                margin: 0.4em 0 0 0;
+            }
+
+            .concert ul {
+                list-style-position: inside;
+                column-count: 2;
+            }
+        </style>
+        <script
+			  src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+			  integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8="
+			  crossorigin="anonymous"></script>
+        <script>
+            const songToTokens = [
+                [21, 0, 0, 21, 0],
+                [14, 0, 0, 16, 14],
+                [32, 0, 0, 12, 0],
+                [0, 0, 32, 0, 12],
+                [0, 21, 0, 0, 21],
+                [0, 0, 21, 0, 21],
+            ];
+            const lastSongsInConcerts = [3, 5];
+            const songCount = 6;
+            var token = 0;
+            var song = 0;
+            var concert = 0;
+            var reqTokens = [0, 0, 0, 0, 0];
+            function updateTokens() {
+                concert = 0;
+                for (token = 0; token < 5; token++)
+                    reqTokens[token] = 0;
+                for (song = 0; song < songCount; song++) {
+                    if (!$(`#song${song}`).is(":checked"))
+                        for (token = 0; token < 5; token++) {
+                            reqTokens[token] += songToTokens[song][token];
+                            console.log(reqTokens[token])
+                        }
+                    if (lastSongsInConcerts.includes(song)) {
+                        for (token = 0; token < 5; token++) {
+                            console.log(`#c${concert}_${token}`);
+                            console.log($(`#c${concert}_${token}`));
+                            console.log(reqTokens[token]);
+                            $(`#c${concert}_${token}`).html(reqTokens[token]);
+                            reqTokens[token] = 0;
+                        }
+                        concert++;
+                    }
+                }
+            }
+            $(function() {
+                for (song = 0; song < songCount; song++) {
+                    $(`#song${song}`).on("click", updateTokens)
+                }
+                updateTokens();
+                console.log("ready");
+            });
+        </script>
+        <title>Grand Concert Token Tracker</title>
+    </head>
+    <body onload="">
+        <h1>Grand Concert Token Tracker</h1>
+        <hr>
+        <div class="main-flex" style="container-type: inline-size;">
+            <div class="main-flex song">
+                <div class="concert">
+                    <h3>1st Concert</h3>
+                    <ul>
+                        <li><img src="gltokenfiles/token_da.png"> <span id="c0_0">67</span></li>
+                        <li><img src="gltokenfiles/token_pa.png"> <span id="c0_1">0</span></li>
+                        <li><img src="gltokenfiles/token_vo.png"> <span id="c0_2">32</span></li>
+                        <li><img src="gltokenfiles/token_vi.png"> <span id="c0_3">49</span></li>
+                        <li><img src="gltokenfiles/token_me.png"> <span id="c0_4">26</span></li>
+                    </ul>
+                </div>
+                <input name="song0" id="song0" type="checkbox">
+                <label for="song0">
+                    <div class="songbox">
+                        <img src="gltokenfiles/Jacket_icon_l_1057.png" class="song">
+                        <div class="songDetails autoSize">
+                            <b>Zero is where the Center Stands!</b>
+                            <div class="songBonus autoSize" style="height: 1em !important">
+                                <img class="half" src="gltokenfiles/buff.png">
+                                <span class="rainbow"><img src="universal/speed.png"></span>
+                                <img class="half" src="gltokenfiles/mic.png">
+                                <img src="gltokenfiles/skill.png">
+                            </div>
+                            <ul>
+                                <li><img src="gltokenfiles/token_da.png"> 21</li>
+                                <li><img src="gltokenfiles/token_vi.png"> 21</li>
+                            </ul>
+                        </div>
+                    </div>
+                </label>
+                <input name="song1" id="song1" type="checkbox">
+                <label for="song1">
+                    <div class="songbox">
+                        <img src="gltokenfiles/Jacket_icon_l_1003.png" class="song">
+                        <div class="songDetails autoSize">
+                            <b>Run n' Run!</b>
+                            <div class="songBonus autoSize" style="height: 1em !important">
+                                <img class="half" src="gltokenfiles/buff.png">
+                                <img src="gltokenfiles/skill.png">
+                                <img class="half" src="gltokenfiles/mic.png">
+                                <span class="rainbow"><img src="universal/speed.png"></span>
+                            </div>
+                            <ul>
+                                <li><img src="gltokenfiles/token_da.png"> 14</li>
+                                <li><img src="gltokenfiles/token_vi.png"> 16</li>
+                                <li><img src="gltokenfiles/token_me.png"> 14</li>
+                            </ul>
+                        </div>
+                    </div>
+                </label>
+                <input name="song2" id="song2" type="checkbox">
+                <label for="song2">
+                    <div class="songbox">
+                        <img src="gltokenfiles/Jacket_icon_l_1044.png" class="song">
+                        <div class="songDetails autoSize">
+                            <b>Full Speed Ahead! Umadol Power☆</b>
+                            <div class="songBonus autoSize" style="height: 1em !important">
+                                <img class="half" src="gltokenfiles/buff.png">
+                                <img src="universal/speed.png">
+                                <img class="half" src="gltokenfiles/mic.png">
+                                <span class="rainbow"><img src="universal/speed.png"></span>
+                            </div>
+                            <ul>
+                                <li><img src="gltokenfiles/token_da.png"> 32</li>
+                                <li><img src="gltokenfiles/token_vi.png"> 12</li>
+                            </ul>
+                        </div>
+                    </div>
+                </label>
+                <input name="song3" id="song3" type="checkbox">
+                <label for="song3">
+                    <div class="songbox">
+                        <img src="gltokenfiles/Starting_gate_09.webp" class="song">
+                        <div class="songDetails autoSize">
+                            <b> 	Here Comes Our Time</b>
+                            <div class="songBonus autoSize" style="height: 1em !important">
+                                <img class="half" src="gltokenfiles/buff.png">
+                                <img src="universal/pow.png">
+                                <img class="half" src="gltokenfiles/mic.png">
+                                <span class="rainbow"><img src="universal/speed.png"></span>
+                            </div>
+                            <ul>
+                                <li><img src="gltokenfiles/token_vo.png"> 32</li>
+                                <li><img src="gltokenfiles/token_me.png"> 12</li>
+                            </ul>
+                        </div>
+                    </div>
+                </label>
+            </div>
+            <div class="main-flex song">
+                <div class="concert">
+                    <h3>Extra Songs</h3>
+                    <ul>
+                        <li><img src="gltokenfiles/token_da.png"> <span id="c1_0">0</span></li>
+                        <li><img src="gltokenfiles/token_pa.png"> <span id="c1_1">21</span></li>
+                        <li><img src="gltokenfiles/token_vo.png"> <span id="c1_2">21</span></li>
+                        <li><img src="gltokenfiles/token_vi.png"> <span id="c1_3">0</span></li>
+                        <li><img src="gltokenfiles/token_me.png"> <span id="c1_4">42</span></li>
+                    </ul>
+                </div>
+                <input name="song4" id="song4" type="checkbox">
+                <label for="song4">
+                    <div class="songbox">
+                        <img src="gltokenfiles/SG04.jpg" class="song">
+                        <div class="songDetails autoSize">
+                            <b>Believe in Miracles!</b>
+                            <div class="songBonus autoSize" style="height: 1em !important">
+                                <img class="half" src="gltokenfiles/buff.png">
+                                <span class="rainbow"><img src="universal/wit.png"></span>
+                                <img class="half" src="gltokenfiles/mic.png">
+                                <span class="rainbow"><img src="universal/speed.png"></span>
+                            </div>
+                            <ul>
+                                <li><img src="gltokenfiles/token_pa.png"> 21</li>
+                                <li><img src="gltokenfiles/token_me.png"> 21</li>
+                            </ul>
+                        </div>
+                    </div>
+                </label>
+                <input name="song5" id="song5" type="checkbox">
+                <label for="song5">
+                    <div class="songbox">
+                        <img src="gltokenfiles/Starting_gate_12.jpg" class="song">
+                        <div class="songDetails autoSize">
+                            <b>Go This Way</b>
+                            <div class="songBonus autoSize" style="height: 1em !important">
+                                <img class="half" src="gltokenfiles/buff.png">
+                                <span class="rainbow"><img src="universal/pow.png"></span>
+                                <img class="half" src="gltokenfiles/mic.png">
+                                <img src="gltokenfiles/skill.png">
+                            </div>
+                            <ul>
+                                <li><img src="gltokenfiles/token_vo.png"> 21</li>
+                                <li><img src="gltokenfiles/token_me.png"> 21</li>
+                            </ul>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <h3><a href=".">Site Index</a></h3>
+    </body>
+</html>
