@@ -95,6 +95,7 @@
 
             .songbox:hover {
                 background-color: #ddd;
+                scale: 1.05;
             }
             
             :checked + label .songbox {
@@ -117,6 +118,10 @@
             .concert ul {
                 list-style-position: inside;
                 column-count: 2;
+            }
+
+            .main-flex div {
+                scale: 1 !important;
             }
         </style>
         <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
@@ -148,10 +153,13 @@
             var song = 0;
             var concert = 0;
             var reqTokens = [0, 0, 0, 0, 0];
+            var totalReqTokens = [0, 0, 0, 0, 0];
             function updateTokens() {
                 concert = 0;
-                for (token = 0; token < 5; token++)
+                for (token = 0; token < 5; token++) {
                     reqTokens[token] = 0;
+                    totalReqTokens[token] = 0;
+                }
                 for (song = 0; song < songCount; song++) {
                     if (!$(`#song${song}`).is(":checked"))
                         for (token = 0; token < 5; token++) {
@@ -174,16 +182,36 @@
                                     }
                                 );
                             //$(`#c${concert}_${token}`).html(reqTokens[token]);
+                            totalReqTokens[token] += reqTokens[token];
                             reqTokens[token] = 0;
                         }
                         concert++;
                     }
                 }
+                for (token = 0; token < 5; token++) {
+                    const target = $(`#c_${token}`);
+                    target.stop()
+                        .css("text-indent", parseInt(target.html()) + "px")
+                        .animate({textIndent: totalReqTokens[token]},
+                            {
+                                duration: 300,
+                                easing: "easeOutCirc",
+                                step: function(currentStep) {
+                                    target.html(Math.round(currentStep));
+                                }
+                            });
+                }
+            }
+            function reset() {
+                for (song = 0; song < songCount; song++)
+                    $(`#song${song}`).prop('checked', false);
+                updateTokens();
             }
             $(function() {
                 for (song = 0; song < songCount; song++) {
                     $(`#song${song}`).on("click", updateTokens)
                 }
+                $(`#overall`).on("click", reset)
                 updateTokens();
                 console.log("ready");
             });
@@ -578,7 +606,35 @@
                     </div>
                 </label>
             </div>
+            <div class="main-flex song">
+                <div class="concert">
+                    <h3>Overall</h3>
+                    <ul>
+                        <li><img src="gltokenfiles/token_da.png"> <span id="c_0">189</span></li>
+                        <li><img src="gltokenfiles/token_pa.png"> <span id="c_1">138</span></li>
+                        <li><img src="gltokenfiles/token_vo.png"> <span id="c_2">129</span></li>
+                        <li><img src="gltokenfiles/token_vi.png"> <span id="c_3">212</span></li>
+                        <li><img src="gltokenfiles/token_me.png"> <span id="c_4">196</span></li>
+                    </ul>
+                </div>
+                <input name="overall" id="overall" type="button">
+                <label for="overall">
+                    <div class="songbox">
+                        <img src="gltokenfiles/GIRLSLEGENDU.png" class="song">
+                        <div class="songDetails autoSize">
+                            <h3>Reset</h3>
+                        </div>
+                    </div>
+                </label>
+                <a href=".">
+                    <div class="songbox">
+                        <img src="mainIcon.png" class="song">
+                        <div class="songDetails autoSize">
+                            <h3>Site Index</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
-        <h3><a href=".">Site Index</a></h3>
     </body>
 </html>
