@@ -162,8 +162,9 @@
                         for (token = 0; token < 5; token++) {
                             const target = $(`#c${concert}_${token}`);
                             console.log(parseInt(target.html()))
-                            target.css("text-indent", parseInt(target.html()) + "px");
-                            target.animate({textIndent: reqTokens[token]},
+                            target.stop()
+                                .css("text-indent", parseInt(target.html()) + "px")
+                                .animate({textIndent: reqTokens[token]},
                                     {
                                         duration: 300,
                                         easing: "easeOutCirc",
